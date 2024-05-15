@@ -24,7 +24,6 @@ func init() {
 }
 
 func (b *Book) CreateBook() *Book {
-	// db.NewRecord(b)
 	db.Create(&b)
 	return b
 }
@@ -41,8 +40,19 @@ func GetBookById(id int64) (*Book, *gorm.DB) {
 	return &getBook, db
 }
 
+func DeleteBook(id int64) error {
+	result := db.Where("id = ?", id).Delete(&Book{})
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+/*
 func DeleteBook(id int64) Book {
 	var book Book
 	db.Where("id = ?", id).Delete(book)
 	return book
 }
+
+*/

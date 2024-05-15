@@ -36,7 +36,11 @@ func GetBookById(w http.ResponseWriter, r *http.Request) {
 
 func CreateBook(w http.ResponseWriter, r *http.Request) {
 	CreateBook := &models.Book{}
-	utils.ParseBody(r, CreateBook)
+	if err := utils.ParseBody(r, CreateBook); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Error parsing request body: " + err.Error()))
+		return
+	}
 	b := CreateBook.CreateBook()
 	res, _ := json.Marshal(b)
 	w.WriteHeader(http.StatusOK)
